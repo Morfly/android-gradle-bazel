@@ -1,0 +1,7 @@
+android_binary(
+    name = "morfly_gradle",
+    custom_package = "org.morfly.gradle",
+    manifest = "//app:src/main/AndroidManifest.xml",
+    enable_data_binding = True,
+    deps = ["//app"],
+)

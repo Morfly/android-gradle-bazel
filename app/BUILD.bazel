@@ -1,0 +1,100 @@
+#load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_android_library")
+load("//tools/kotlin:kotlin.bzl", "kt_android_library")
+load("@rules_jvm_external//:defs.bzl", "artifact")
+
+package(default_visibility = ["//visibility:public"])
+
+DATABINDING_LAYOUTS = [
+    "src/main/res/layout/activity_main.xml"
+]
+
+VIEW_MODELS = [
+    "src/main/java/org/morfly/gradle/app/MainViewModel.kt"
+]
+
+BINDING_ADAPTERS = [
+    "src/main/java/org/morfly/gradle/app/BindingAdapters.java"
+]
+
+EXCLUDED_LIB_APP_FILES = VIEW_MODELS + BINDING_ADAPTERS
+
+APP_FILES_WITH_RESOURCE_IMPORTS = glob(
+    ["src/main/java/org/morfly/gradle/app/**/*.kt"],
+    exclude = EXCLUDED_LIB_APP_FILES
+)
+
+APP_FILES = [] + APP_FILES_WITH_RESOURCE_IMPORTS
+
+
+kt_android_library(
+    name = "view_models",
+    srcs = VIEW_MODELS,
+    custom_package = "org.morfly.gradle.app.viewmodels",
+    manifest = "src/main/ViewModelsManifest.xml",
+    enable_data_binding = True,
+    deps = [
+        ":resources",
+        artifact("androidx.databinding:databinding-common"),
+        artifact("androidx.databinding:databinding-runtime"),
+    ]
+)
+
+android_library(
+    name = "binding_adapters",
+    srcs = BINDING_ADAPTERS,
+    enable_data_binding = True,
+    custom_package = "org.morfly.gradle.app.databinding.adapters",
+    manifest = "src/main/DataBindingAdaptersManifest.xml",
+    deps = [
+        ":resources",
+        ":view_models",
+        artifact("androidx.annotation:annotation"),
+    ]
+)
+
+android_library(
+    name = "resources",
+    custom_package = "org.morfly.gradle.app",
+    manifest = "src/main/AndroidManifest.xml",
+    exports_manifest = True,
+    resource_files = glob(
+        ["src/main/res/**"],
+        exclude = DATABINDING_LAYOUTS
+    )
+)
+
+android_library(
+    name = "databinding_resources",
+    srcs = BINDING_ADAPTERS,
+    custom_package = "org.morfly.gradle.app.databinding",
+    manifest = "src/main/DataBindingResourcesManifest.xml",
+    exports_manifest = True,
+    enable_data_binding = True,
+    resource_files = glob(DATABINDING_LAYOUTS),
+    deps = [
+        ":binding_adapters",
+        ":resources",
+        ":view_models",
+        artifact("androidx.annotation:annotation"),
+        artifact("androidx.databinding:databinding-adapters"),
+        artifact("androidx.databinding:databinding-common"),
+        artifact("androidx.databinding:databinding-runtime"),
+    ]
+)
+
+kt_android_library(
+    name = "app",
+    srcs = APP_FILES,
+    custom_package = "org.morfly.gradle.app.ui",
+    manifest = "src/main/AppAndroidManifest.xml",
+    enable_data_binding = True,
+    deps = [
+        ":binding_adapters",
+        ":databinding_resources",
+        ":resources",
+        ":view_models",
+        artifact("androidx.databinding:databinding-adapters"),
+        artifact("androidx.databinding:databinding-common"),
+        artifact("androidx.databinding:databinding-runtime"),
+    ]
+)
