@@ -85,7 +85,7 @@ android_library(
 kt_android_library(
     name = "app",
     srcs = APP_FILES,
-    custom_package = "org.morfly.gradle.app.ui",
+    custom_package = "org.morfly.gradle",
     manifest = "src/main/AppAndroidManifest.xml",
     enable_data_binding = True,
     deps = [

@@ -4,8 +4,8 @@ package org.morfly.gradle.app
 import android.app.Activity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
-import org.morfly.gradle.app.ui.R
-//import org.morfly.gradle.R // gradle
+//import org.morfly.gradle.app.ui.R
+import org.morfly.gradle.R // gradle
 import org.morfly.gradle.app.databinding.databinding.ActivityMainBinding
 //import org.morfly.gradle.databinding.ActivityMainBinding // gradle
 
