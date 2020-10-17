@@ -10,5 +10,5 @@ class MainViewModel {
             Features: androidx, data-binding, binding-adapters 
         """.trimIndent()
 
-    val magicNumber: Int get() = 43
+    val magicNumber: Int get() = 46
 }

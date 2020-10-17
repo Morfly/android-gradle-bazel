@@ -63,38 +63,41 @@ android_library(
     )
 )
 
-android_library(
-    name = "databinding_resources",
-    srcs = BINDING_ADAPTERS,
-    custom_package = "org.morfly.gradle.app.databinding",
-    manifest = "src/main/DataBindingResourcesManifest.xml",
+#android_library(
+#    name = "databinding_resources",
+#    srcs = BINDING_ADAPTERS,
+#    custom_package = "org.morfly.gradle.app.databinding",
+#    manifest = "src/main/DataBindingResourcesManifest.xml",
+#    exports_manifest = True,
+#    enable_data_binding = True,
+#    resource_files = glob(DATABINDING_LAYOUTS),
+#    deps = [
+#        ":binding_adapters",
+#        ":resources",
+#        ":view_models",
+#        artifact("androidx.annotation:annotation"),
+#        artifact("androidx.databinding:databinding-adapters"),
+#        artifact("androidx.databinding:databinding-common"),
+#        artifact("androidx.databinding:databinding-runtime"),
+#    ]
+#)
+
+kt_android_library(
+    name = "app",
+    srcs = APP_FILES + BINDING_ADAPTERS,
+    custom_package = "org.morfly.gradle",
+    manifest = "src/main/AppAndroidManifest.xml",
     exports_manifest = True,
     enable_data_binding = True,
     resource_files = glob(DATABINDING_LAYOUTS),
     deps = [
         ":binding_adapters",
+#        ":databinding_resources",
         ":resources",
         ":view_models",
+        artifact("androidx.databinding:databinding-adapters"),
+        artifact("androidx.databinding:databinding-common"),
+        artifact("androidx.databinding:databinding-runtime"),
         artifact("androidx.annotation:annotation"),
-        artifact("androidx.databinding:databinding-adapters"),
-        artifact("androidx.databinding:databinding-common"),
-        artifact("androidx.databinding:databinding-runtime"),
-    ]
-)
-
-kt_android_library(
-    name = "app",
-    srcs = APP_FILES,
-    custom_package = "org.morfly.gradle",
-    manifest = "src/main/AppAndroidManifest.xml",
-    enable_data_binding = True,
-    deps = [
-        ":binding_adapters",
-        ":databinding_resources",
-        ":resources",
-        ":view_models",
-        artifact("androidx.databinding:databinding-adapters"),
-        artifact("androidx.databinding:databinding-common"),
-        artifact("androidx.databinding:databinding-runtime"),
     ]
 )
