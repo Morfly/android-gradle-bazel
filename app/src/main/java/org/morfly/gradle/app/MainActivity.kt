@@ -18,5 +18,6 @@ class MainActivity : Activity() {
         val binding: ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         val viewModel = MainViewModel()
         binding.vm = viewModel
+        binding.res = ResViewModel()
     }
 }

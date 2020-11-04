@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">android-gradle-bazel</string>
+    <string name="sample_string">Some string</string>
 </resources>

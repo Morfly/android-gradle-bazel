@@ -8,8 +8,28 @@ DATABINDING_LAYOUTS = [
     "src/main/res/layout/activity_main.xml"
 ]
 
+VIEW_MODELS_WITH_RESOURCE_IMPORTS = [
+    "src/main/java/org/morfly/gradle/app/ResViewModel.kt",
+]
+
 VIEW_MODELS = [
-    "src/main/java/org/morfly/gradle/app/MainViewModel.kt"
+    "src/main/java/org/morfly/gradle/app/MainViewModel.kt",
+] +  [
+    "modify_imports_in_" + view_models_with_resource_imports[0:-3]
+    for view_models_with_resource_imports in VIEW_MODELS_WITH_RESOURCE_IMPORTS
+]
+
+[
+    genrule(
+        name = "modify_imports_in_" + file[0:-3],
+        srcs = [file],
+        outs = [file[0:-3] + "_modified.kt"],
+        cmd = """
+    cat $(SRCS) |
+    sed 's/import org.morfly.gradle.R/import org.morfly.gradle.app.viewmodels.R/g' > $(OUTS)
+    """,
+    )
+    for file in VIEW_MODELS_WITH_RESOURCE_IMPORTS
 ]
 
 BINDING_ADAPTERS = [
