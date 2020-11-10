@@ -1,19 +1,19 @@
-#load("@io_bazel_rules_kotlin//kotlin:kotlin.bzl", "kt_android_library")
 load("//tools/kotlin:kotlin.bzl", "kt_android_library")
 load("@rules_jvm_external//:defs.bzl", "artifact")
 
 package(default_visibility = ["//visibility:public"])
 
+
 DATABINDING_LAYOUTS = [
-    "src/main/res/layout/activity_main.xml"
+    "src/main/res/layout/activity_main_1.xml"
 ]
 
 VIEW_MODELS_WITH_RESOURCE_IMPORTS = [
-    "src/main/java/org/morfly/gradle/app/ResViewModel.kt",
+#    "src/main/java/org/morfly/gradle/lib1/ResViewModel1.kt",
 ]
 
 VIEW_MODELS = [
-    "src/main/java/org/morfly/gradle/app/MainViewModel.kt",
+    "src/main/java/org/morfly/gradle/lib1/MainViewModel1.kt",
 ] +  [
     "modify_imports_in_" + view_models_with_resource_imports[0:-3]
     for view_models_with_resource_imports in VIEW_MODELS_WITH_RESOURCE_IMPORTS
@@ -26,20 +26,20 @@ VIEW_MODELS = [
         outs = [file[0:-3] + "_modified.kt"],
         cmd = """
     cat $(SRCS) |
-    sed 's/import org.morfly.gradle.R/import org.morfly.gradle.app.viewmodels.R/g' > $(OUTS)
+    sed 's/import org.morfly.gradle.R/import org.morfly.gradle.lib1.viewmodels.R/g' > $(OUTS)
     """,
     )
     for file in VIEW_MODELS_WITH_RESOURCE_IMPORTS
 ]
 
 BINDING_ADAPTERS = [
-    "src/main/java/org/morfly/gradle/app/BindingAdapters.java"
+    "src/main/java/org/morfly/gradle/lib1/LibOneBindingAdapters.java"
 ]
 
 EXCLUDED_LIB_APP_FILES = VIEW_MODELS + BINDING_ADAPTERS
 
 APP_FILES_WITH_RESOURCE_IMPORTS = glob(
-    ["src/main/java/org/morfly/gradle/app/**/*.kt"],
+    ["src/main/java/org/morfly/gradle/lib1/**/*.kt"],
     exclude = EXCLUDED_LIB_APP_FILES
 )
 
@@ -49,7 +49,7 @@ APP_FILES = [] + APP_FILES_WITH_RESOURCE_IMPORTS
 kt_android_library(
     name = "view_models",
     srcs = VIEW_MODELS,
-    custom_package = "org.morfly.gradle.app.viewmodels",
+    custom_package = "org.morfly.gradle.lib1.viewmodels",
     manifest = "src/main/ViewModelsManifest.xml",
     enable_data_binding = True,
     deps = [
@@ -63,7 +63,7 @@ android_library(
     name = "binding_adapters",
     srcs = BINDING_ADAPTERS,
     enable_data_binding = True,
-    custom_package = "org.morfly.gradle.app.databinding.adapters",
+    custom_package = "org.morfly.gradle.lib1.databinding.adapters",
     manifest = "src/main/DataBindingAdaptersManifest.xml",
     deps = [
         ":resources",
@@ -74,7 +74,7 @@ android_library(
 
 android_library(
     name = "resources",
-    custom_package = "org.morfly.gradle.app",
+    custom_package = "org.morfly.gradle.lib1",
     manifest = "src/main/AndroidManifest.xml",
     exports_manifest = True,
     resource_files = glob(
@@ -83,42 +83,40 @@ android_library(
     )
 )
 
-#android_library(
-#    name = "databinding_resources",
-#    srcs = BINDING_ADAPTERS,
-#    custom_package = "org.morfly.gradle.app.databinding",
-#    manifest = "src/main/DataBindingResourcesManifest.xml",
-#    exports_manifest = True,
-#    enable_data_binding = True,
-#    resource_files = glob(DATABINDING_LAYOUTS),
+#kt_android_library(
+#    name = "lib1_proxy",
+#    custom_package = "org.morfly.gradle.lib1_proxy",
+#    srcs = ["src/main/java/org/morfly/gradle/lib1/Lib1.kt"],
 #    deps = [
-#        ":binding_adapters",
-#        ":resources",
-#        ":view_models",
-#        artifact("androidx.annotation:annotation"),
-#        artifact("androidx.databinding:databinding-adapters"),
-#        artifact("androidx.databinding:databinding-common"),
-#        artifact("androidx.databinding:databinding-runtime"),
-#    ]
+#        ":binding_adapters"
+#    ],
 #)
 
 kt_android_library(
-    name = "app",
+    name = "lib1",
     srcs = APP_FILES + BINDING_ADAPTERS,
-    custom_package = "org.morfly.gradle",
-    manifest = "src/main/AppAndroidManifest.xml",
+    custom_package = "org.morfly.gradle.lib1",
+    manifest = "src/main/LibOneAndroidManifest.xml",
     exports_manifest = True,
     enable_data_binding = True,
     resource_files = glob(DATABINDING_LAYOUTS),
     deps = [
         ":binding_adapters",
-#        ":databinding_resources",
-        ":resources",
         ":view_models",
-        "//lib1:lib1_proxy",
+        ":resources",
+#        ":lib1_proxy",
         artifact("androidx.databinding:databinding-adapters"),
         artifact("androidx.databinding:databinding-common"),
         artifact("androidx.databinding:databinding-runtime"),
         artifact("androidx.annotation:annotation"),
     ]
+)
+
+kt_android_library(
+    name = "lib1_proxy",
+    custom_package = "org.morfly.gradle.lib1.proxy",
+    srcs = ["src/main/java/org/morfly/gradle/lib1/Lib1.kt"],
+    deps = [
+        "//lib1"
+    ],
 )

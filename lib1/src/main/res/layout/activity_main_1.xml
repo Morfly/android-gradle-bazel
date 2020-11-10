@@ -2,12 +2,12 @@
 <layout>
     <data>
         <variable
-            name="vm"
-            type="org.morfly.gradle.app.MainViewModel" />
+            name="vm1"
+            type="org.morfly.gradle.lib1.MainViewModel1" />
 
-        <variable
-            name="res"
-            type="org.morfly.gradle.app.ResViewModel" />
+<!--        <variable-->
+<!--            name="res"-->
+<!--            type="org.morfly.gradle.lib1.ResViewModel1" />-->
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:textSize="22dp"
-            app:text="@{vm.text}"
+            app:text="@{vm1.text}"
             android:textColor="@android:color/black"
             android:gravity="center_horizontal" />
 
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            app:lib_number="@{vm.magicNumber}"
+            app:lib_number="@{vm1.magicNumber}"
             android:textSize="32dp" />
 
         <View
@@ -46,7 +46,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            app:text="@{res.resString}"
             android:textSize="22dp" />
 
     </LinearLayout>

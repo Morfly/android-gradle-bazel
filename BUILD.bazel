@@ -3,5 +3,8 @@ android_binary(
     custom_package = "org.morfly",
     manifest = "//app:src/main/AndroidManifest.xml",
     enable_data_binding = True,
-    deps = ["//app"],
+    deps = [
+        "//app",
+#        "//lib1",
+    ],
 )

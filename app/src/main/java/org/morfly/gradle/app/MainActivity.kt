@@ -6,8 +6,10 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 //import org.morfly.gradle.app.ui.R
 import org.morfly.gradle.R // gradle
+import org.morfly.gradle.lib1.BR // gradle
 //import org.morfly.gradle.app.databinding.databinding.ActivityMainBinding
 import org.morfly.gradle.databinding.ActivityMainBinding // gradle
+import org.morfly.gradle.lib1.MainViewModel1
 
 
 class MainActivity : Activity() {
@@ -19,5 +21,8 @@ class MainActivity : Activity() {
         val viewModel = MainViewModel()
         binding.vm = viewModel
         binding.res = ResViewModel()
+        BR.vm1
+
+        MainViewModel1()
     }
 }
